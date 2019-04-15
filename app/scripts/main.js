@@ -14,6 +14,7 @@ function hasGetUserMedia() {
 
   if (hasGetUserMedia()) {
     // Good to go!
+    console.log("yes");
   } else {
     var videoEl = document.getElementsByTagName('video')[0];
     console.log('not supported')
@@ -34,19 +35,23 @@ function hasGetUserMedia() {
     }
   }
 
+
+
+  /*
   const hdConstraints = {
     video: {width: {min: 1280}, height: {min: 720}}
   };
-
   navigator.mediaDevices.getUserMedia(hdConstraints).
     then((stream) => {video.srcObject = stream});
+*/
 
+  /*
   const vgaConstraints = {
     video: {width: {exact: 640}, height: {exact: 480}}
   };
-
   navigator.mediaDevices.getUserMedia(vgaConstraints).
     then((stream) => {video.srcObject = stream});
+    */
 
 (function (logger) {
   console.old = console.log;
