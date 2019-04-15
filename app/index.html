@@ -19,49 +19,64 @@
     <!-- endbuild -->
   </head>
   <body>
+
     <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
     <div class="container">
-      <div class="header">
-        <h3 class="text-muted">webcamp prototyp</h3>
+
+      <!-- header -->
+      <div class="header d-none d-lg-block">
+        <h3 class="text-muted">Webcam</h3>
       </div>
+      <div class="header d-lg-none">
+        <h3 class="text-muted">Mobile</h3>
+      </div>
+
+      <!-- row -->
       <div class="row marketing">
         <div class="col-lg-8">
-      <div id="screenshot" style="text-align:center;">
-        <div class="jumbotron">
-          <video class="videostream" autoplay=""></video>
+
+          <!-- cam screenshot -->
+          <div id="screenshot" style="text-align:center;" class="d-none d-lg-block">
+            <div class="jumbotron">
+              <video class="videostream" autoplay=""></video>
+            </div>
+            <div class="jumbotron"><img id="screenshot-img"></div>
+            <div class="btn-container">
+              <p><button class="btn btn-dark capture-button ">Capture video</button></p>
+              <p><button class="btn btn-dark" id="screenshot-button" disabled="">Take screenshot</button></p>
+              <p><button class="btn btn-dark upload-button" disabled="">Upload</button></p>
+            </div>
+          </div>
+
+          <!-- mobile upload -->
+          <div class="header d-lg-none">
+            <input id="mobile-input" class="btn btn-dark " type="file" accept="image/*">
+            <img id="mobile-input-img" src="#" alt="your image" />
+          </div>
+
         </div>
-        <div class="jumbotron">
-        <img id="screenshot-img">
-        </div>
-        <div class="btn-container">
-        <p><button class="btn btn-dark capture-button ">Capture video</button>
-        </p><p><button class="btn btn-dark" id="screenshot-button" disabled="">Take screenshot</button></p>
-        <p><button class="btn btn-dark upload-button" disabled="">Upload</button></p>
-        </div>
-      </div>
-        </div>
+
+        <!-- console -->
         <div class="col-lg-4">
           <h4 class="text-muted">Console</h4>
           <div class="jumbotron text-align-left">
             <pre id="logger"></pre>
+          </div>
         </div>
-
-        </div>
-      </div>
-
-      <div class="row marketing">
+        <!-- /console -->
 
       </div>
 
-      <div class="footer">
-      </div>
+      <div class="row"></div>
+      <div class="footer"></div>
+
     </div>
 
+    <!-- insite script -->
     <script>
-
-
       const captureVideoButton =
         document.querySelector('#screenshot .capture-button');
       const uploadButton =
@@ -105,9 +120,31 @@
 
       navigator.mediaDevices.getUserMedia(constraints).
         then((stream) => {video.srcObject = stream});
+
+        // file reader
+
+        const mobileInput = document.querySelector("#mobile-input");
+        const mobileInputImg = document.querySelector('#mobile-input-img');
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                  mobileInputImg.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        mobileInput.addEventListener('change', function() {
+            readURL(this);
+        });
+
+
     </script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <!--
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
@@ -116,6 +153,7 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
+  -->
     <!-- build:js scripts/vendor.js -->
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
