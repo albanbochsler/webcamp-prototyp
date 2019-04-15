@@ -21,10 +21,6 @@
   </head>
   <body>
 
-    <!--[if IE]>
-      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
     <div class="container">
 
       <!-- header -->
@@ -53,10 +49,12 @@
           </div>
 
           <!-- mobile upload -->
-          <div class="header d-lg-none">
+          <div class="header d-lg-none" style="text-align:center;">
             <p><input id="mobile-input" class="btn btn-dark " type="file" accept="image/*"></p>
-            <p><img id="mobile-input-img" src="#" class="d-none"/></p>
-            <p><button id="mobile-upload-btn" class="btn btn-dark upload-button d-none" onclick="proceed();">Upload</button></p>
+            <div class="jumbotron"><img id="mobile-input-img" src="#" class="d-none" style="max-width: 100%;"/></div>
+            <div class="btn-container">
+              <p><button id="mobile-upload-btn" class="btn btn-dark upload-button d-none" onclick="proceed();">Upload</button></p>
+            </div>
           </div>
 
         </div>
@@ -75,7 +73,7 @@
       <div id="step-2" class="row marketing d-none">
         <div class="col-lg-8">
           <p>Modify image and start rendering...</p>
-          <p><button id="restart" class="btn btn-dark" onclick="window.location.reload();">Restart Process</button></p>
+          <p><button id="restart" class="btn btn-dark" onclick="window.location.href='index.html';">Restart Process</button></p>
         </div>
       </div>
 
@@ -132,34 +130,28 @@
         console.error('Error: ', error);
       }
 
-      /*
-      navigator.mediaDevices.getUserMedia(constraints).
-        then((stream) => {video.srcObject = stream});
-        */
+      // file reader
+      const mobileInput = document.querySelector("#mobile-input");
+      const mobileInputImg = document.querySelector('#mobile-input-img');
+      const mobileUploadBtn = document.querySelector('#mobile-upload-btn');
 
-        // file reader
+      function readURL(input) {
+          console.log('trying to read uploaded img...');
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              console.log('   reader created');
+              reader.onload = function (e) {
+                console.log('   setting source');
+                mobileInputImg.src = e.target.result;
+                mobileInputImg.classList.remove('d-none');
+                mobileUploadBtn.classList.remove('d-none');
+              }
+              reader.readAsDataURL(input.files[0]);
+          } else {
+            console.log('NO FILE FOUND!');
 
-        const mobileInput = document.querySelector("#mobile-input");
-        const mobileInputImg = document.querySelector('#mobile-input-img');
-        const mobileUploadBtn = document.querySelector('#mobile-upload-btn');
-
-        function readURL(input) {
-            console.log('trying to read uploaded img...');
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                console.log('   reader created');
-                reader.onload = function (e) {
-                  console.log('   setting source');
-                  mobileInputImg.src = e.target.result;
-                  mobileInputImg.classList.remove('d-none');
-                  mobileUploadBtn.classList.remove('d-none');
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-              console.log('NO FILE FOUND!');
-
-            }
-            console.log('...done');
+          }
+          console.log('...done');
         }
 
         mobileInput.addEventListener('change', function() {
@@ -172,20 +164,9 @@
           document.querySelector("#step-2").classList.remove("d-none");
         };
 
-
     </script>
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <!--
-    <script>
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='https://www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-XXXXX-X');ga('send','pageview');
-    </script>
-  -->
+
     <!-- build:js scripts/vendor.js -->
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->

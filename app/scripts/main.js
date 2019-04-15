@@ -7,51 +7,25 @@
 // $(function () { $('[data-toggle="popover"]').popover(); });
 
 
-function hasGetUserMedia() {
-    return !!(navigator.mediaDevices &&
-      navigator.mediaDevices.getUserMedia);
-  }
 
-  if (hasGetUserMedia()) {
-    // Good to go!
-    console.log('yes');
-  } else {
-    var videoEl = document.getElementsByTagName('video')[0];
-    console.log('not supported')
-    if (videoEl.options.context === 'webrtc') {
-      console.log('not supported dsd')
-      App.canvas.width = videoEl.videoWidth;
-      App.canvas.height = videoEl.videoHeight;
-      App.canvas.getContext('2d').drawImage(videoEl, 0, 0);
-
-      // Otherwise, if the context is Flash, we ask the shim to
-      // directly call window.webcam, where our shim is located
-      // and ask it to capture for us.
-    } else if (App.options.context === 'flash') {
-      window.webcam.capture();
-      App.changeFilter();
-    } else {
-      alert('No context was supplied to getSnapshot()');
-    }
-  }
 
 
 
   /*
   const hdConstraints = {
-    video: {width: {min: 1280}, height: {min: 720}}
-  };
-  navigator.mediaDevices.getUserMedia(hdConstraints).
-    then((stream) => {video.srcObject = stream});
+  video: {width: {min: 1280}, height: {min: 720}}
+};
+navigator.mediaDevices.getUserMedia(hdConstraints).
+then((stream) => {video.srcObject = stream});
 */
 
-  /*
-  const vgaConstraints = {
-    video: {width: {exact: 640}, height: {exact: 480}}
-  };
-  navigator.mediaDevices.getUserMedia(vgaConstraints).
-    then((stream) => {video.srcObject = stream});
-    */
+/*
+const vgaConstraints = {
+video: {width: {exact: 640}, height: {exact: 480}}
+};
+navigator.mediaDevices.getUserMedia(vgaConstraints).
+then((stream) => {video.srcObject = stream});
+*/
 
 (function (logger) {
   console.old = console.log;
@@ -79,3 +53,33 @@ function hasGetUserMedia() {
     console.old.apply(undefined, arguments);
   };
 })(document.getElementById('logger'));
+
+function hasGetUserMedia() {
+  return !!(navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia);
+}
+
+if (hasGetUserMedia()) {
+  // Good to go!
+  console.log('OK: agent supports usermedia');
+} else {
+  console.log('WARNING: usermedia supported');
+  console.log('checking for fallbacks ...');
+  var videoEl = document.getElementsByTagName('video')[0];
+  if (videoEl.options.context === 'webrtc') {
+    console.log('... webrtc context')
+    App.canvas.width = videoEl.videoWidth;
+    App.canvas.height = videoEl.videoHeight;
+    App.canvas.getContext('2d').drawImage(videoEl, 0, 0);
+
+    // Otherwise, if the context is Flash, we ask the shim to
+    // directly call window.webcam, where our shim is located
+    // and ask it to capture for us.
+  } else if (App.options.context === 'flash') {
+    console.log('... is flash context');
+    window.webcam.capture();
+    App.changeFilter();
+  } else {
+    console.log('... other contexts');
+  }
+}
