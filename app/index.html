@@ -35,7 +35,7 @@
       </div>
 
       <!-- row -->
-      <div class="row marketing">
+      <div id="step-1" class="row marketing">
         <div class="col-lg-8">
 
           <!-- cam screenshot -->
@@ -47,14 +47,15 @@
             <div class="btn-container">
               <p><button class="btn btn-dark capture-button ">Capture video</button></p>
               <p><button class="btn btn-dark" id="screenshot-button" disabled="">Take screenshot</button></p>
-              <p><button class="btn btn-dark upload-button" disabled="">Upload</button></p>
+              <p><button id="upload-btn" class="btn btn-dark upload-button d-none" onclick="proceed();">Upload</button></p>
             </div>
           </div>
 
           <!-- mobile upload -->
           <div class="header d-lg-none">
-            <input id="mobile-input" class="btn btn-dark " type="file" accept="image/*">
-            <img id="mobile-input-img" src="#" alt="your image" />
+            <p><input id="mobile-input" class="btn btn-dark " type="file" accept="image/*"></p>
+            <p><img id="mobile-input-img" src="#" class="d-none"/></p>
+            <p><button id="mobile-upload-btn" class="btn btn-dark upload-button d-none" onclick="proceed();">Upload</button></p>
           </div>
 
         </div>
@@ -70,6 +71,13 @@
 
       </div>
 
+      <div id="step-2" class="row marketing d-none">
+        <div class="col-lg-8">
+          <p>Modify image and start rendering...</p>
+          <p><button id="restart" class="btn btn-dark" onclick="window.location.reload();">Restart Process</button></p>
+        </div>
+      </div>
+
       <div class="row"></div>
       <div class="footer"></div>
 
@@ -77,10 +85,13 @@
 
     <!-- insite script -->
     <script>
+
       const captureVideoButton =
         document.querySelector('#screenshot .capture-button');
+      /*
       const uploadButton =
         document.querySelector('#screenshot .upload-button');
+        */
       const screenshotButton = document.querySelector('#screenshot-button');
       const img = document.querySelector('#screenshot img');
       const video = document.querySelector('#screenshot video');
@@ -99,7 +110,7 @@
         canvas.getContext('2d').drawImage(video, 0, 0);
         // Other browsers will fall back to image/png
         img.src = canvas.toDataURL('image/webp');
-        uploadButton.disabled = false;
+        uploadBtn.classList.remove('d-none');
         console.log('Success!')
 
       };
@@ -125,20 +136,36 @@
 
         const mobileInput = document.querySelector("#mobile-input");
         const mobileInputImg = document.querySelector('#mobile-input-img');
+        const mobileUploadBtn = document.querySelector('#mobile-upload-btn');
 
         function readURL(input) {
+            console.log('trying to read uploaded img...');
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
+                console.log('   reader created');
                 reader.onload = function (e) {
+                  console.log('   setting source');
                   mobileInputImg.src = e.target.result;
+                  mobileInputImg.classList.remove('d-none');
+                  mobileUploadBtn.classList.remove('d-none');
                 }
                 reader.readAsDataURL(input.files[0]);
+            } else {
+              console.log('NO FILE FOUND!');
+
             }
+            console.log('...done');
         }
 
         mobileInput.addEventListener('change', function() {
+            console.log('mobile file changed');
             readURL(this);
         });
+
+        function proceed() {
+          document.querySelector("#step-1").classList.add("d-none");
+          document.querySelector("#step-2").classList.remove("d-none");
+        };
 
 
     </script>
