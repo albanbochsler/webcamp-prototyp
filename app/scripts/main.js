@@ -6,6 +6,7 @@
 // https://getbootstrap.com/docs/4.0/components/popovers/#example-enable-popovers-everywhere
 // $(function () { $('[data-toggle="popover"]').popover(); });
 
+
 function hasGetUserMedia() {
     return !!(navigator.mediaDevices &&
       navigator.mediaDevices.getUserMedia);
