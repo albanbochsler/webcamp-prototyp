@@ -14,7 +14,7 @@ function hasGetUserMedia() {
 
   if (hasGetUserMedia()) {
     // Good to go!
-    console.log("yes");
+    console.log('yes');
   } else {
     var videoEl = document.getElementsByTagName('video')[0];
     console.log('not supported')
